@@ -1,22 +1,141 @@
-function enviarResultadosPorCorreo(nombreAlumno, modulo, calificacion, aprobado) {
-  fetch("https://formspree.io/f/TU_CODIGO_AQUI", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify({
-      Alumno: nombreAlumno || "Sin nombre registrado",
-      Modulo: modulo,
-      Calificacion: calificacion + "%",
-      Estado: aprobado ? "Aprobado" : "No aprobado",
-      Fecha: new Date().toLocaleString()
-    })
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log("Resultados enviados a piedra.angulartecnologia@gmail.com");
-    }
-  })
-  .catch(error => console.error("Error al enviar:", error));
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academia Básica de Plomería y Electricidad</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f7f6; color: #333; }
+    header { background: #1e3a8a; color: white; padding: 20px; border-radius: 8px; text-align: center; }
+    .modulo { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    h2 { color: #1e3a8a; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; }
+    .pregunta { margin-bottom: 15px; padding: 10px; background: #f9fafb; border-left: 4px solid #3b82f6; }
+    label { display: block; margin: 5px 0; cursor: pointer; }
+    input[type="text"], input[type="email"] { width: 100%; padding: 8px; margin: 8px 0 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { background: #16a34a; color: white; border: none; padding: 12px 20px; font-size: 16px; border-radius: 5px; cursor: pointer; width: 100%; }
+    button:hover { background: #15803d; }
+    #resultado { margin-top: 20px; padding: 15px; border-radius: 5px; display: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Curso Introductorio: Plomería y Electricidad</h1>
+  <p>Aprende desde cero con ejemplos prácticos y evalúa tus conocimientos.</p>
+</header>
+
+<!-- LECCIONES BÁSICAS -->
+<div class="modulo">
+  <h2>Módulo 1: Conceptos Básicos de Plomería</h2>
+  <p><strong>1. Cinta Teflón:</strong> Se utiliza en roscas macho para evitar fugas. Siempre debe enrollarse en el sentido de las manecillas del reloj (hacia donde aprieta la tuerca) para que no se desenrolle al enroscar.</p>
+  <p><strong>2. Tipos de tubería comunes:</strong> El <em>PVC</em> se usa para desagües (agua sin presión), mientras que el <em>CPVC</em> o <em>PPR (termofusión)</em> soportan agua caliente y presión.</p>
+  <p><strong>3. Sifón o cespol:</strong> La curva en forma de "U" debajo del lavabo retiene un poco de agua para bloquear los malos olores del drenaje.</p>
+</div>
+
+<div class="modulo">
+  <h2>Módulo 2: Conceptos Básicos de Electricidad</h2>
+  <p><strong>1. Regla de oro de seguridad:</strong> Antes de tocar cualquier cable o apagador, baja la pastilla termomagnética (breaker) correspondiente en el centro de carga.</p>
+  <p><strong>2. Identificación de cables:</strong> La <strong>Fase</strong> lleva la corriente (usualmente cable negro o rojo), el <strong>Neutro</strong> cierra el circuito (blanco) y la <strong>Tierra física</strong> protege contra descargas (verde o desnudo).</p>
+  <p><strong>3. Interruptores:</strong> Siempre deben cortar la <em>Fase</em>, nunca el Neutro, para evitar que el foco quede energizado aunque esté apagado.</p>
+</div>
+
+<!-- FORMULARIO Y QUIZ -->
+<div class="modulo">
+  <h2>Evaluación Práctica y Registro</h2>
+  <p>Completa tus datos y responde el cuestionario. Tus resultados se enviarán automáticamente al instructor.</p>
+
+  <!-- REEMPLAZA 'TU_CODIGO_FORMSPREE' CON TU ENLACE REAL -->
+  <form id="quizForm" action="https://formspree.io/f/TU_CODIGO_FORMSPREE" method="POST">
+    <label><strong>Nombre completo del alumno:</strong></label>
+    <input type="text" name="Nombre_Alumno" id="nombre" required placeholder="Ej. Juan Pérez">
+
+    <label><strong>Correo o teléfono de contacto (opcional):</strong></label>
+    <input type="text" name="Contacto_Alumno" placeholder="Ej. juan@correo.com">
+
+    <!-- Pregunta 1 -->
+    <div class="pregunta">
+      <p><strong>1. [Plomería] ¿En qué dirección se debe enrollar la cinta teflón en una rosca?</strong></p>
+      <label><input type="radio" name="p1" value="0" required> En contra de las manecillas del reloj</label>
+      <label><input type="radio" name="p1" value="1"> En el sentido de las manecillas del reloj (hacia donde aprieta)</label>
+      <label><input type="radio" name="p1" value="0"> En cualquier dirección, no importa</label>
+    </div>
+
+    <!-- Pregunta 2 -->
+    <div class="pregunta">
+      <p><strong>2. [Plomería] ¿Para qué sirve la curva en forma de "U" (cespol) debajo del lavabo?</strong></p>
+      <label><input type="radio" name="p2" value="1" required> Para retener agua y evitar que regresen malos olores del drenaje</label>
+      <label><input type="radio" name="p2" value="0"> Para aumentar la presión del agua fría</label>
+      <label><input type="radio" name="p2" value="0"> Para filtrar el agua potable</label>
+    </div>
+
+    <!-- Pregunta 3 -->
+    <div class="pregunta">
+      <p><strong>3. [Electricidad] ¿Qué cable debe interrumpir siempre un apagador sencillo?</strong></p>
+      <label><input type="radio" name="p3" value="0" required> El cable Neutro (blanco)</label>
+      <label><input type="radio" name="p3" value="0"> La Tierra física (verde)</label>
+      <label><input type="radio" name="p3" value="1"> La Fase (negro o rojo)</label>
+    </div>
+
+    <!-- Pregunta 4 -->
+    <div class="pregunta">
+      <p><strong>4. [Electricidad] ¿Cuál es el primer paso obligatorio antes de cambiar un contacto eléctrico?</strong></p>
+      <label><input type="radio" name="p4" value="1" required> Bajar la pastilla (breaker) en el centro de carga y verificar ausencia de voltaje</label>
+      <label><input type="radio" name="p4" value="0"> Usar cinta de aislar sobre los dedos</label>
+      <label><input type="radio" name="p4" value="0"> Apagar únicamente las luces de la habitación</label>
+    </div>
+
+    <!-- Campo oculto que enviará la calificación a tu correo -->
+    <input type="hidden" name="Calificacion_Final" id="calificacionOculta">
+    <input type="hidden" name="Detalle_Respuestas" id="detalleOculto">
+
+    <button type="submit">Calificar y Enviar Resultados</button>
+  </form>
+
+  <div id="resultado"></div>
+</div>
+
+<script>
+  document.getElementById('quizForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // Detiene el envío inmediato para calcular primero
+
+    const form = this;
+    const p1 = parseInt(form.p1.value);
+    const p2 = parseInt(form.p2.value);
+    const p3 = parseInt(form.p3.value);
+    const p4 = parseInt(form.p4.value);
+
+    const total = p1 + p2 + p3 + p4;
+    const porcentaje = (total / 4) * 100;
+
+    // Guardar datos en los campos ocultos para que lleguen a tu correo
+    document.getElementById('calificacionOculta').value = `${total}/4 (${porcentaje}%)`;
+    document.getElementById('detalleOculto').value = 
+      `P1 (Teflón): ${p1 ? 'Correcta' : 'Incorrecta'} | ` +
+      `P2 (Cespol): ${p2 ? 'Correcta' : 'Incorrecta'} | ` +
+      `P3 (Fase): ${p3 ? 'Correcta' : 'Incorrecta'} | ` +
+      `P4 (Seguridad): ${p4 ? 'Correcta' : 'Incorrecta'}`;
+
+    // Mostrar resultado en pantalla al alumno
+    const divRes = document.getElementById('resultado');
+    divRes.style.display = 'block';
+    divRes.style.background = porcentaje >= 75 ? '#dcfce7' : '#fee2e2';
+    divRes.style.color = porcentaje >= 75 ? '#166534' : '#991b1b';
+    divRes.innerHTML = `¡Hola ${document.getElementById('nombre').value}! Obtuviste ${total} de 4 aciertos (${porcentaje}%). Enviando tus resultados...`;
+
+    // Enviar datos a Formspree por segundo plano
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        divRes.innerHTML += "<br>✅ Resultados enviados correctamente al correo del instructor.";
+      } else {
+        divRes.innerHTML += "<br>⚠️ Calificación lista, pero falta configurar el enlace de correo (Formspree).";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
