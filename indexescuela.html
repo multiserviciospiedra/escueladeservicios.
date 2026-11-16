@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia Piedra Angular | Plomería y Electricidad Casera</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        hydro: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                        },
+                        volt: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilos personalizados para impresión de diploma y transiciones */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-printable, #certificate-printable * {
+                visibility: visible;
+            }
+            #certificate-printable {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 20px;
+                box-shadow: none !important;
+                border: 8px solid #0f172a !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Scrollbar discreto */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Notificación Toast Flotante -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- Barra de Navegación Superior -->
+    <header class="bg-navy-900 text-white sticky top-0 z-40 shadow-lg border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+                <!-- Logo y Marca -->
+                <div class="flex items-center justify-between">
+                    <button onclick="switchTab('inicio')" class="flex items-center gap-3 text-left group focus:outline-none">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-hydro-500 to-volt-500 flex items-center justify-center text-navy-950 font-extrabold text-xl shadow-md group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-compass-drafting"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-lg tracking-tight block leading-none">ACADEMIA</span>
+                            <span class="text-xs font-semibold text-volt-400 tracking-wider uppercase">Piedra Angular</span>
+                        </div>
+                    </button>
+                    <!-- Botón Menú Móvil -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Navegación Principal -->
+                <nav id="main-nav" class="hidden md:flex flex-wrap items-center gap-1 lg:gap-2">
+                    <button onclick="switchTab('inicio')" data-tab="inicio" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 bg-slate-800 text-white">
+                        <i class="fa-solid fa-house"></i> Inicio
+                    </button>
+                    <button onclick="switchTab('plomeria')" data-tab="plomeria" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-faucet-drip text-hydro-400"></i> Plomería
+                    </button>
+                    <button onclick="switchTab('electricidad')" data-tab="electricidad" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-volt-400"></i> Electricidad
+                    </button>
+                    <button onclick="switchTab('quizzes')" data-tab="quizzes" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-emerald-400"></i> Evaluaciones
+                    </button>
+                    <button onclick="switchTab('herramientas')" data-tab="herramientas" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-book-bookmark text-purple-400"></i> Glosario y Guías
+                    </button>
+                </nav>
+
+                <!-- Widget de Progreso y Rango -->
+                <div class="flex items-center justify-between md:justify-end gap-3 bg-slate-800/80 px-3.5 py-2 rounded-xl border border-slate-700/80">
+                    <div class="flex items-center gap-2.5">
+                        <div id="rank-icon-box" class="w-8 h-8 rounded-lg bg-slate-700 text-volt-400 flex items-center justify-center text-sm">
+                            <i class="fa-solid fa-hard-hat"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold">Nivel:</span>
+                                <span id="user-rank-label" class="text-xs font-bold text-white">Aprendiz</span>
+                            </div>
+                            <div class="w-28 sm:w-32 h-2 bg-slate-900 rounded-full overflow-hidden mt-1">
+                                <div id="global-progress-bar" class="h-full bg-gradient-to-r from-hydro-500 to-volt-400 transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="global-progress-text" class="text-xs font-extrabold text-hydro-400">0%</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal Dinámico -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ==================== SECCIÓN: INICIO / DASHBOARD ==================== -->
+        <section id="view-inicio" class="tab-view fade-in space-y-8">
+            <!-- Hero Banner -->
+            <div class="bg-gradient-to-br from-navy-900 via-navy-800 to-slate-900 rounded-2xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden border border-slate-700">
+                <div class="absolute right-0 top-0 opacity-10 pointer-events-none transform translate-x-10 -translate-y-6">
+                    <i class="fa-solid fa-screwdriver-wrench text-[220px]"></i>
+                </div>
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-xs font-semibold text-volt-400">
+                        <i class="fa-solid fa-shield-halved"></i> Capacitación Técnica Práctica para el Hogar
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
+                        Domina la <span class="text-hydro-400">Plomería</span> y la <span class="text-volt-400">Electricidad Casera</span> paso a paso
+                    </h1>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        Aprende a diagnosticar fallas, realizar reparaciones seguras, seleccionar materiales profesionales y certifica tus conocimientos con nuestras evaluaciones prácticas interactivas.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('plomeria')" class="px-5 py-3 rounded-xl bg-hydro-600 hover:bg-hydro-500 text-white font-semibold text-sm shadow-lg shadow-hydro-600/25 transition flex items-center gap-2">
+                            <i class="fa-solid fa-faucet-drip"></i> Iniciar Plomería
+                        </button>
+                        <button onclick="switchTab('electricidad')" class="px-5 py-3 rounded-xl bg-volt-500 hover:bg-volt-400 text-navy-950 font-bold text-sm shadow-lg shadow-volt-500/25 transition flex items-center gap-2">
+                            <i class="fa-solid fa-bolt"></i> Iniciar Electricidad
+                        </button>
+                        <button onclick="switchTab('quizzes')" class="px-5 py-3 rounded-xl bg-slate-700/80 hover:bg-slate-700 text-white font-semibold text-sm border border-slate-600 transition flex items-center gap-2">
+                            <i class="fa-solid fa-award text-emerald-400"></i> Evaluar mi Nivel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tarjetas de Resumen de Avance -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <!-- Progreso Plomería -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-hydro-50 text-hydro-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <span id="dash-plumbing-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-hydro-100 text-hydro-700">0 / 3 Lecciones</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900">Módulo Plomería Casera</h3>
+                    <p class="text-xs text-slate-500 mt-1 mb-4">Tuberías, termofusión, reparación de llaves, WC, tinacos y válvulas.</p>
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-4">
+                        <div id="dash-plumbing-bar" class="h-full bg-hydro-500 transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Mejor Quiz: <strong id="dash-plumbing-quiz" class="text-slate-800">Sin realizar</strong></span>
+                        <button onclick="switchTab('plomeria')" class="text-hydro-600 font-bold hover:underline">Ir al módulo →</button>
+                    </div>
+                </div>
+
+                <!-- Progreso Electricidad -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-volt-50 text-volt-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-plug-circle-bolt"></i>
+                        </div>
+                        <span id="dash-electric-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-volt-100 text-volt-700">0 / 3 Lecciones</span>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-900">Módulo Electricidad Casera</h3>
+                    <p class="text-xs text-slate-500 mt-1 mb-4">Seguridad, multímetro, apagadores de escalera, contactos y centros de carga.</p>
+                    <div class="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden mb-4">
+                        <div id="dash-electric-bar" class="h-full bg-volt-500 transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Mejor Quiz: <strong id="dash-electric-quiz" class="text-slate-800">Sin realizar</strong></span>
+                        <button onclick="switchTab('electricidad')" class="text-volt-600 font-bold hover:underline">Ir al módulo →</button>
+                    </div>
+                </div>
+
+                <!-- Certificación Integral -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <span id="dash-cert-status" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">Pendiente</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-slate-900">Certificación Integral</h3>
+                        <p class="text-xs text-slate-500 mt-1 mb-4">Aprueba el examen final con 80% o más para desbloquear tu constancia personalizada.</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">Examen Final: <strong id="dash-final-quiz" class="text-slate-800">Sin realizar</strong></span>
+                        <button onclick="startQuiz('integral')" class="text-emerald-600 font-bold hover:underline">Presentar examen →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ruta de Aprendizaje Recomendada & Gestión de Cuenta -->
+            <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-navy-900 text-volt-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm sm:text-base">Tu Perfil de Estudiante (Guardado Automático)</h4>
+                        <p class="text-xs text-slate-500 mt-0.5">Tu avance y calificaciones se guardan localmente en este navegador. Puedes personalizar tu nombre para tu diploma.</p>
+                        <div class="mt-3 flex flex-wrap items-center gap-2">
+                            <input type="text" id="student-name-input" placeholder="Escribe tu nombre completo..." class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:border-hydro-500 w-64">
+                            <button onclick="saveStudentName()" class="px-3.5 py-1.5 bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold rounded-lg transition">Guardar Nombre</button>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="confirmResetProgress()" class="text-xs text-rose-600 hover:text-rose-700 font-medium px-3 py-2 rounded-lg hover:bg-rose-50 transition self-end sm:self-center">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reiniciar progreso
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN: MÓDULO PLOMERÍA ==================== -->
+        <section id="view-plomeria" class="tab-view hidden fade-in space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-hydro-600">Módulo 1 • Instalaciones Hidráulicas</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Plomería Casera Paso a Paso</h2>
+                    <p class="text-sm text-slate-500 mt-1">Selecciona una lección para estudiar los procedimientos, herramientas y esquemas técnicos.</p>
+                </div>
+                <button onclick="startQuiz('plomeria')" class="px-4 py-2.5 rounded-xl bg-hydro-600 hover:bg-hydro-500 text-white font-semibold text-sm shadow transition flex items-center gap-2 self-start sm:self-center shrink-0">
+                    <i class="fa-solid fa-vial-circle-check"></i> Quiz de Plomería
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Sidebar de Lecciones de Plomería -->
+                <div class="lg:col-span-4 space-y-3" id="plumbing-lesson-list">
+                    <!-- Renderizado dinámico por JS -->
+                </div>
+                <!-- Visor de Contenido de Lección -->
+                <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8" id="plumbing-lesson-viewer">
+                    <!-- Renderizado dinámico por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN: MÓDULO ELECTRICIDAD ==================== -->
+        <section id="view-electricidad" class="tab-view hidden fade-in space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider text-volt-600">Módulo 2 • Instalaciones Eléctricas Residenciales</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Electricidad Casera Segura</h2>
+                    <p class="text-sm text-slate-500 mt-1">Domina el código de colores, mediciones con multímetro, apagadores y protecciones térmicas.</p>
+                </div>
+                <button onclick="startQuiz('electricidad')" class="px-4 py-2.5 rounded-xl bg-volt-500 hover:bg-volt-400 text-navy-950 font-bold text-sm shadow transition flex items-center gap-2 self-start sm:self-center shrink-0">
+                    <i class="fa-solid fa-bolt"></i> Quiz de Electricidad
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Sidebar de Lecciones de Electricidad -->
+                <div class="lg:col-span-4 space-y-3" id="electric-lesson-list">
+                    <!-- Renderizado dinámico por JS -->
+                </div>
+                <!-- Visor de Contenido de Lección -->
+                <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8" id="electric-lesson-viewer">
+                    <!-- Renderizado dinámico por JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN: EVALUACIONES Y QUIZZES ==================== -->
+        <section id="view-quizzes" class="tab-view hidden fade-in space-y-6">
+            <!-- Selector de Exámenes -->
+            <div id="quiz-selector-screen" class="space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h2 class="text-2xl font-extrabold text-slate-900">Centro de Evaluación y Diagnóstico</h2>
+                    <p class="text-sm text-slate-500 mt-1">Pon a prueba tus conocimientos prácticos con casos reales. Al finalizar recibirás un diagnóstico de tu nivel y recomendaciones de repaso.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Card Quiz Plomería -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                        <div class="h-2 bg-hydro-500"></div>
+                        <div class="p-6 flex-grow flex flex-col justify-between space-y-6">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-hydro-50 text-hydro-700">6 Preguntas Situacionales</span>
+                                    <i class="fa-solid fa-faucet-drip text-hydro-500 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900">Evaluación de Plomería</h3>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Evalúa tu criterio sobre tuberías (PPR, CPVC, Cobre), diagnóstico de fugas en WC/mezcladoras y flujo de tinacos.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center text-xs">
+                                    <span class="text-slate-500">Mejor calificación:</span>
+                                    <span id="card-score-plomeria" class="font-bold text-slate-800">Sin intentos</span>
+                                </div>
+                                <button onclick="startQuiz('plomeria')" class="w-full py-3 rounded-xl bg-hydro-600 hover:bg-hydro-500 text-white font-semibold text-sm transition shadow-sm">
+                                    Comenzar Quiz Plomería
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Quiz Electricidad -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                        <div class="h-2 bg-volt-500"></div>
+                        <div class="p-6 flex-grow flex flex-col justify-between space-y-6">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-volt-50 text-volt-700">6 Preguntas Situacionales</span>
+                                    <i class="fa-solid fa-bolt text-volt-500 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900">Evaluación de Electricidad</h3>
+                                <p class="text-xs text-slate-500 mt-2 leading-relaxed">Comprueba tu dominio en seguridad eléctrica, uso de multímetro, apagadores de 3 vías y selección de pastillas térmicas.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between items-center text-xs">
+                                    <span class="text-slate-500">Mejor calificación:</span>
+                                    <span id="card-score-electricidad" class="font-bold text-slate-800">Sin intentos</span>
+                                </div>
+                                <button onclick="startQuiz('electricidad')" class="w-full py-3 rounded-xl bg-volt-500 hover:bg-volt-400 text-navy-950 font-bold text-sm transition shadow-sm">
+                                    Comenzar Quiz Electricidad
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Examen Integral -->
+                    <div class="bg-navy-900 text-white rounded-2xl border border-slate-700 shadow-md overflow-hidden flex flex-col">
+                        <div class="h-2 bg-gradient-to-r from-hydro-400 via-emerald-400 to-volt-400"></div>
+                        <div class="p-6 flex-grow flex flex-col justify-between space-y-6">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">10 Preguntas • Certificación</span>
+                                    <i class="fa-solid fa-award text-volt-400 text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-white">Examen Integral del Hogar</h3>
+                                <p class="text-xs text-slate-300 mt-2 leading-relaxed">Combina escenarios críticos de plomería y electricidad. Obtén <strong>80% o más</strong> para emitir tu Diploma Oficial de Academia Piedra Angular.</p>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="p-3 rounded-xl bg-slate-800/80 border border-slate-700 flex justify-between items-center text-xs">
+                                    <span class="text-slate-400">Mejor calificación:</span>
+                                    <span id="card-score-integral" class="font-bold text-emerald-400">Sin intentos</span>
+                                </div>
+                                <button onclick="startQuiz('integral')" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-navy-950 font-extrabold text-sm transition shadow-lg">
+                                    Presentar Examen Final
+                                </button>
+                                <button id="btn-view-certificate-direct" onclick="openCertificateModal()" class="hidden w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-volt-400 font-semibold text-xs border border-slate-600 transition">
+                                    <i class="fa-solid fa-eye mr-1"></i> Ver mi Diploma Obtenido
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenedor Activo del Quiz -->
+            <div id="quiz-active-screen" class="hidden max-w-3xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
+                <!-- Cabecera del Quiz -->
+                <div class="bg-navy-900 text-white px-6 py-4 flex items-center justify-between">
+                    <div>
+                        <span id="quiz-active-subtitle" class="text-xs uppercase tracking-wider text-volt-400 font-bold">Módulo</span>
+                        <h3 id="quiz-active-title" class="text-lg font-bold">Título del Quiz</h3>
+                    </div>
+                    <button onclick="exitQuiz()" class="text-xs text-slate-300 hover:text-white bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
+                        <i class="fa-solid fa-xmark mr-1"></i> Salir
+                    </button>
+                </div>
+                <!-- Barra progreso pregunta -->
+                <div class="w-full h-1.5 bg-slate-100">
+                    <div id="quiz-progress-bar" class="h-full bg-hydro-500 transition-all duration-300" style="width: 10%"></div>
+                </div>
+                <!-- Cuerpo de Pregunta -->
+                <div class="p-6 sm:p-8 space-y-6">
+                    <div class="flex items-center justify-between text-xs font-semibold text-slate-500">
+                        <span id="quiz-question-counter">Pregunta 1 de 6</span>
+                        <span id="quiz-topic-tag" class="px-2.5 py-0.5 rounded bg-slate-100 text-slate-700">Tema</span>
+                    </div>
+
+                    <h4 id="quiz-question-text" class="text-lg sm:text-xl font-bold text-slate-900 leading-snug">
+                        ¿Pregunta aquí?
+                    </h4>
+
+                    <!-- Opciones -->
+                    <div id="quiz-options-container" class="space-y-3">
+                        <!-- Botones generados dinámicamente -->
+                    </div>
+
+                    <!-- Caja de Retroalimentación Inmediata -->
+                    <div id="quiz-feedback-box" class="hidden rounded-xl p-4 border text-sm leading-relaxed">
+                        <div class="flex items-start gap-3">
+                            <i id="quiz-feedback-icon" class="fa-solid fa-circle-check text-lg mt-0.5"></i>
+                            <div>
+                                <p id="quiz-feedback-title" class="font-bold mb-1">¡Correcto!</p>
+                                <p id="quiz-feedback-explanation" class="text-xs sm:text-sm">Explicación técnica aquí.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón Siguiente -->
+                    <div class="pt-2 flex justify-end">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden px-6 py-3 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm transition flex items-center gap-2">
+                            Siguiente Pregunta <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pantalla de Resultados y Diagnóstico -->
+            <div id="quiz-results-screen" class="hidden max-w-3xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden">
+                <div class="bg-gradient-to-r from-navy-900 to-slate-800 text-white p-8 text-center space-y-3">
+                    <div id="result-badge-icon" class="w-16 h-16 rounded-2xl bg-white/10 mx-auto flex items-center justify-center text-3xl text-volt-400">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold" id="result-heading">¡Evaluación Completada!</h3>
+                    <p class="text-slate-300 text-sm" id="result-subheading">Diagnóstico de aprendizaje generado</p>
+                </div>
+
+                <div class="p-6 sm:p-8 space-y-6">
+                    <!-- Métricas -->
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="block text-xs text-slate-500 font-medium">Calificación</span>
+                            <span id="result-score-pct" class="text-2xl sm:text-3xl font-extrabold text-navy-900 mt-1 block">0%</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="block text-xs text-slate-500 font-medium">Aciertos</span>
+                            <span id="result-score-fraction" class="text-2xl sm:text-3xl font-extrabold text-emerald-600 mt-1 block">0/0</span>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+                            <span class="block text-xs text-slate-500 font-medium">Nivel Detectado</span>
+                            <span id="result-level-tag" class="text-sm sm:text-base font-extrabold text-hydro-600 mt-2 block">Intermedio</span>
+                        </div>
+                    </div>
+
+                    <!-- Diagnóstico y Recomendaciones -->
+                    <div class="p-5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                        <h4 class="font-bold text-amber-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-stethoscope text-amber-600"></i> Diagnóstico Técnico del Instructor
+                        </h4>
+                        <p id="result-diagnostic-text" class="text-xs sm:text-sm text-amber-950 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Lecciones Recomendadas a Repasar -->
+                    <div id="result-recommendations-box" class="space-y-3">
+                        <h4 class="font-bold text-slate-900 text-sm">Plan de Repaso Personalizado:</h4>
+                        <ul id="result-recommendations-list" class="space-y-2 text-xs sm:text-sm">
+                            <!-- Items generados dinámicamente -->
+                        </ul>
+                    </div>
+
+                    <!-- Acciones Finales -->
+                    <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                        <button onclick="exitQuiz()" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold text-sm transition">
+                            Volver a Evaluaciones
+                        </button>
+                        <div class="flex flex-wrap gap-3">
+                            <button id="result-certificate-btn" onclick="openCertificateModal()" class="hidden px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm shadow transition flex items-center gap-2">
+                                <i class="fa-solid fa-award"></i> Ver / Descargar Diploma
+                            </button>
+                            <button id="result-retry-btn" class="px-5 py-2.5 rounded-xl bg-navy-900 hover:bg-navy-800 text-white font-semibold text-sm transition flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right"></i> Reintentar Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SECCIÓN: GLOSARIO Y GUÍAS RÁPIDAS ==================== -->
+        <section id="view-herramientas" class="tab-view hidden fade-in space-y-8">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <h2 class="text-2xl font-extrabold text-slate-900">Glosario Técnico y Calculadoras Rápidas</h2>
+                <p class="text-sm text-slate-500 mt-1">Consulta definiciones esenciales y calcula calibres eléctricos o diámetros de tubería al instante.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Buscador de Glosario (7 cols) -->
+                <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-lg text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-book text-purple-600"></i> Diccionario Técnico
+                        </h3>
+                        <span id="glossary-count" class="text-xs font-semibold text-slate-400">12 términos</span>
+                    </div>
+
+                    <!-- Barra de Búsqueda y Filtro -->
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative flex-grow">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="glossary-search" oninput="filterGlossary()" placeholder="Buscar término (ej. Termofusión, AWG, Jarro de aire)..." class="w-full pl-10 pr-4 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:border-hydro-500">
+                        </div>
+                        <select id="glossary-category" onchange="filterGlossary()" class="px-3 py-2 text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-hydro-500">
+                            <option value="all">Todos</option>
+                            <option value="plomeria">Plomería</option>
+                            <option value="electricidad">Electricidad</option>
+                        </select>
+                    </div>
+
+                    <!-- Lista de Términos -->
+                    <div id="glossary-list" class="space-y-3 max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Renderizado dinámico -->
+                    </div>
+                </div>
+
+                <!-- Calculadoras Rápidas (5 cols) -->
+                <div class="lg:col-span-5 space-y-6">
+                    <!-- Calculadora Eléctrica (Watts -> Amperes -> Calibre AWG y Pastilla) -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-lg bg-volt-100 text-volt-700 flex items-center justify-center">
+                                <i class="fa-solid fa-calculator"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-base text-slate-900">Calculadora de Carga Eléctrica</h3>
+                                <p class="text-xs text-slate-500">Calcula el calibre AWG y pastilla ideal (127V)</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">Potencia Total del Circuito (Watts):</label>
+                                <input type="number" id="calc-watts" value="1500" min="50" max="15000" oninput="calculateElectricLoad()" class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-xl focus:outline-none focus:border-volt-500">
+                                <div class="flex flex-wrap gap-1.5 mt-2">
+                                    <button onclick="setWattsPreset(600)" class="text-[11px] px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700">Iluminación (600W)</button>
+                                    <button onclick="setWattsPreset(1800)" class="text-[11px] px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700">Microondas/Plan. (1800W)</button>
+                                    <button onclick="setWattsPreset(3500)" class="text-[11px] px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700">Regadera Eléc. (3500W)</button>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-xl bg-navy-900 text-white space-y-2.5">
+                                <div class="flex justify-between text-xs border-b border-slate-700 pb-2">
+                                    <span class="text-slate-400">Corriente estimada (I = W / 127V):</span>
+                                    <span id="calc-amps-res" class="font-bold text-volt-400">11.81 A</span>
+                                </div>
+                                <div class="flex justify-between text-xs border-b border-slate-700 pb-2">
+                                    <span class="text-slate-400">Calibre Cable Cobre (THW):</span>
+                                    <span id="calc-awg-res" class="font-bold text-emerald-400">Calibre 12 AWG</span>
+                                </div>
+                                <div class="flex justify-between text-xs">
+                                    <span class="text-slate-400">Pastilla Termomagnética:</span>
+                                    <span id="calc-breaker-res" class="font-bold text-hydro-400">1 x 20 Amperes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Guía Rápida de Tuberías -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-9 h-9 rounded-lg bg-hydro-100 text-hydro-700 flex items-center justify-center">
+                                <i class="fa-solid fa-ruler-combined"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-base text-slate-900">Selector Rápido de Tubería</h3>
+                                <p class="text-xs text-slate-500">Diámetro recomendado según uso hidráulico</p>
+                            </div>
+                        </div>
+
+                        <select id="pipe-use-select" onchange="updatePipeGuide()" class="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-xl bg-white focus:outline-none focus:border-hydro-500">
+                            <option value="bajada">Bajada principal de Tinaco</option>
+                            <option value="ramal">Ramal interior hacia baño / cocina</option>
+                            <option value="mueble">Alimentación individual (WC / Lavabo)</option>
+                            <option value="desague_lavabo">Desagüe de lavabo / fregadero</option>
+                            <option value="desague_wc">Descarga sanitaria de WC</option>
+                        </select>
+
+                        <div id="pipe-guide-result" class="p-4 rounded-xl bg-hydro-50 border border-hydro-200 text-xs space-y-1.5 text-hydro-950">
+                            <!-- Rellenado por JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal de Diploma / Constancia -->
+    <div id="certificate-modal" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden my-8">
+            <div class="px-6 py-4 bg-slate-100 border-b border-slate-200 flex items-center justify-between no-print">
+                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-award text-volt-600"></i> Constancia Oficial de Acreditación
+                </h3>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-navy-900 hover:bg-navy-800 text-white text-xs font-semibold flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-print"></i> Imprimir / Guardar PDF
+                    </button>
+                    <button onclick="closeCertificateModal()" class="p-1.5 rounded-lg text-slate-500 hover:bg-slate-200">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Área Imprimible del Diploma -->
+            <div id="certificate-printable" class="p-8 sm:p-12 bg-white border-8 border-double border-navy-900 m-4 sm:m-6 text-center relative">
+                <div class="flex justify-center items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-navy-900 text-volt-400 flex items-center justify-center text-2xl">
+                        <i class="fa-solid fa-compass-drafting"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-extrabold text-lg text-navy-900 leading-none">ACADEMIA PIEDRA ANGULAR</span>
+                        <span class="text-xs font-semibold text-hydro-700 uppercase tracking-widest">Capacitación Técnica Residencial</span>
+                    </div>
+                </div>
+
+                <p class="text-xs uppercase tracking-[0.25em] text-slate-500 font-semibold mt-6">Otorga la presente</p>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-navy-900 tracking-tight my-2">CONSTANCIA DE COMPETENCIA</h2>
+                <p class="text-sm text-slate-600 mt-4">A favor de:</p>
+
+                <div class="my-4 py-2 border-b-2 border-slate-300 max-w-lg mx-auto">
+                    <p id="cert-student-name" class="text-2xl sm:text-3xl font-bold text-hydro-700 font-serif">Estudiante Destacado</p>
+                </div>
+
+                <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed mt-4">
+                    Por haber completado satisfactoriamente el programa teórico-práctico y aprobado la evaluación integral de <strong>Plomería e Instalaciones Eléctricas Casera</strong>, demostrando dominio en diagnóstico, seguridad y mantenimiento preventivo residencial.
+                </p>
+
+                <div class="grid grid-cols-3 gap-4 max-w-lg mx-auto mt-8 pt-6 border-t border-slate-200 text-xs">
+                    <div>
+                        <span class="block text-slate-400">Calificación Final</span>
+                        <strong id="cert-score" class="text-navy-900 text-sm">90%</strong>
+                    </div>
+                    <div>
+                        <span class="block text-slate-400">Fecha de Emisión</span>
+                        <strong id="cert-date" class="text-navy-900 text-sm">15/11/2026</strong>
+                    </div>
+                    <div>
+                        <span class="block text-slate-400">Folio de Validación</span>
+                        <strong id="cert-folio" class="text-navy-900 text-sm">PA-2026-884</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-navy-950 text-slate-400 py-6 border-t border-slate-800 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-compass-drafting text-volt-400"></i>
+                <span class="font-bold text-white">Academia Piedra Angular</span>
+                <span>• Formación práctica en mantenimiento residencial.</span>
+            </div>
+            <p class="text-slate-500">Siempre desconecta el suministro eléctrico o cierra la llave de paso antes de intervenir.</p>
+        </div>
+    </footer>
+
+    <!-- Lógica Completa de la Aplicación -->
+    <script>
+        // ==========================================
+        // 1. BASE DE DATOS DE CONTENIDO EDUCATIVO
+        // ==========================================
+        const LESSONS_DATA = {
+            plomeria: [
+                {
+                    id: 'plom-1',
+                    number: 'Lección 1',
+                    title: 'Herramientas, Tuberías y Sellado Profesional',
+                    duration: '10 min',
+                    summary: 'Conoce los materiales modernos (PPR/Tuboplus, CPVC, PVC, Cobre) y sus métodos correctos de unión.',
+                    goldenRule: 'Nunca mezcles pegamento de PVC (azul/transparente) con tubería de CPVC (crema para agua caliente); el solvente es distinto y provocará fugas a presión.',
+                    tools: [
+                        'Llave Stillson (10" o 14") y llave perica',
+                        'Cortatubos de disco (para cobre) y tijera corta-tubo (PPR/CPVC)',
+                        'Termofusora con dados de 1/2" y 3/4" (para tubería verde PPR)',
+                        'Cinta teflón de alta densidad (color rosa o amarilla) y sellador de roscas'
+                    ],
+                    steps: [
+                        { title: 'Identificación del material adecuado', desc: 'Usa PVC hidráulico (blanco) solo para agua fría enterrada o exterior protegido del sol. Usa CPVC (crema) o PPR/Tuboplus (verde) para agua fría y caliente a presión.' },
+                        { title: 'Corte recto y limpieza (biselado)', desc: 'Realiza un corte completamente perpendicular a 90°. Retira rebabas internas o externas para evitar turbulencia y asegurar que el tubo entre hasta el tope de la conexión.' },
+                        { title: 'Aplicación correcta de Cinta Teflón', desc: 'Enrolla la cinta en el sentido de las manecillas del reloj (mirando la rosca de frente), dando de 5 a 7 vueltas firmes. Así, al enroscar la pieza hembra, la cinta no se desenrolla.' },
+                        { title: 'Unión por Termofusión (PPR)', desc: 'Calienta la termofusora a 260°C. Introduce tubo y conexión simultáneamente durante el tiempo indicado (ej. 5 seg para 1/2"), retira y une recto sin girar.' }
+                    ],
+                    svgDiagram: `
+                        <svg viewBox="0 0 600 180" class="w-full h-auto bg-slate-900 rounded-xl p-2">
+                            <text x="20" y="25" fill="#38bdf8" font-size="13" font-weight="bold">ESQUEMA: SENTIDO CORRECTO DE CINTA TEFLÓN Y UNIÓN</text>
+                            <!-- Tubo con rosca -->
+                            <rect x="40" y="75" width="150" height="30" rx="3" fill="#64748b"/>
+                            <rect x="190" y="77" width="45" height="26" fill="#cbd5e1"/>
+                            <!-- Hilos de rosca -->
+                            <line x1="198" y1="77" x2="202" y2="103" stroke="#475569" stroke-width="2"/>
+                            <line x1="208" y1="77" x2="212" y2="103" stroke="#475569" stroke-width="2"/>
+                            <line x1="218" y1="77" x2="222" y2="103" stroke="#475569" stroke-width="2"/>
+                            <line x1="228" y1="77" x2="232" y2="103" stroke="#475569" stroke-width="2"/>
+                            <!-- Cinta teflón -->
+                            <rect x="195" y="75" width="32" height="30" fill="#f472b6" fill-opacity="0.45" stroke="#f472b6" stroke-dasharray="3,2"/>
+                            <!-- Flecha sentido horario -->
+                            <path d="M 210 55 A 20 20 0 0 1 235 70" fill="none" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arrow)"/>
+                            <text x="155" y="48" fill="#fbbf24" font-size="11" font-weight="bold">1. Enrollar sentido horario (5-7 vueltas)</text>
+                            <!-- Conexión Hembra -->
+                            <rect x="330" y="68" width="90" height="44" rx="5" fill="#0891b2"/>
+                            <rect x="420" y="75" width="130" height="30" rx="3" fill="#06b6d4"/>
+                            <path d="M 250 90 L 315 90" stroke="#34d399" stroke-width="3" stroke-dasharray="5,3"/>
+                            <polygon points="315,85 326,90 315,95" fill="#34d399"/>
+                            <text x="335" y="132" fill="#e2e8f0" font-size="11">2. Enroscar firme sin regresar</text>
+                            <text x="40" y="155" fill="#94a3b8" font-size="10">Tip: Si regresas la vuelta tras apretar, se rompe el sello del teflón y goteará.</text>
+                        </svg>
+                    `
+                },
+                {
+                    id: 'plom-2',
+                    number: 'Lección 2',
+                    title: 'Reparación de Fugas en Llaves Mezcladoras y WC',
+                    duration: '12 min',
+                    summary: 'Soluciona el 90% de las fugas domésticas cambiando cartuchos cerámicos, empaques y válvulas de inodoro.',
+                    goldenRule: 'Antes de desarmar cualquier llave o válvula de inodoro, cierra la llave angular inferior o la llave de paso general y libera la presión abriendo el grifo.',
+                    tools: [
+                        'Desarmador plano y de cruz (Phillips)',
+                        'Llave Allen (generalmente de 2.5 mm o 3 mm para monomandos)',
+                        'Pinzas de extensión (pico de loro) con trapo para no rayar el cromo',
+                        'Refacciones: cartucho cerámico / vástago, sapo (flapper) de silicón'
+                    ],
+                    steps: [
+                        { title: 'Diagnóstico en llave mezcladora (goteo constante)', desc: 'Si gotea por la boquilla con la llave cerrada, el sello interno (empaque de hule o disco cerámico) está desgastado. Si fuga por la base del maneral, es un O-ring dañado.' },
+                        { title: 'Desmontaje del maneral y extracción de cartucho', desc: 'Retira el tapón embellecedor (rojo/azul), afloja el tornillo opresor, saca el maneral y desenrosca la tuerca retenedora para extraer el vástago o cartucho.' },
+                        { title: 'Diagnóstico de fuga silenciosa en el WC', desc: 'Si el tanque se rellena solo cada cierto tiempo, el "sapo" (flapper) está deformado por el cloro o hay sarro en el asiento de la válvula de descarga.' },
+                        { title: 'Ajuste de nivel y cambio de sapo', desc: 'Desengancha el sapo viejo, limpia con una fibra el borde donde asienta, coloca el nuevo dejando la cadena con un ligero juego (sin tensar) y calibra el flotador 2 cm debajo del tubo rebosadero.' }
+                    ],
+                    svgDiagram: `
+                        <svg viewBox="0 0 600 190" class="w-full h-auto bg-slate-900 rounded-xl p-2">
+                            <text x="20" y="24" fill="#38bdf8" font-size="13" font-weight="bold">ANATOMÍA DEL TANQUE DE WC Y PUNTOS DE FUGA</text>
+                            <!-- Tanque WC -->
+                            <rect x="60" y="45" width="240" height="120" rx="8" fill="none" stroke="#94a3b8" stroke-width="3"/>
+                            <!-- Nivel de agua -->
+                            <rect x="63" y="80" width="234" height="82" rx="4" fill="#0284c7" fill-opacity="0.35"/>
+                            <line x1="63" y1="80" x2="297" y2="80" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4,3"/>
+                            <!-- Tubo rebosadero -->
+                            <rect x="195" y="65" width="14" height="98" fill="#cbd5e1"/>
+                            <text x="216" y="72" fill="#fbbf24" font-size="10" font-weight="bold">Tubo Rebosadero (Nivel máx: -2 cm)</text>
+                            <!-- Sapo / Flapper -->
+                            <path d="M 160 155 L 195 140 L 195 162 L 160 162 Z" fill="#f43f5e"/>
+                            <line x1="175" y1="145" x2="140" y2="60" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="2,2"/>
+                            <text x="72" y="142" fill="#fda4af" font-size="10" font-weight="bold">Sapo (Flapper)</text>
+                            <!-- Válvula de llenado -->
+                            <rect x="95" y="55" width="16" height="108" fill="#64748b"/>
+                            <rect x="85" y="75" width="36" height="18" rx="4" fill="#34d399"/>
+                            <text x="330" y="65" fill="#e2e8f0" font-size="11" font-weight="bold">Checklist de Reparación:</text>
+                            <text x="330" y="88" fill="#38bdf8" font-size="10">• Agua tira por el centro: Bajar flotador.</text>
+                            <text x="330" y="110" fill="#fda4af" font-size="10">• Agua baja sola: Cambiar sapo y limpiar asiento.</text>
+                            <text x="330" y="132" fill="#34d399" font-size="10">• Silbido al llenar: Limpiar diafragma válvula.</text>
+                            <text x="330" y="154" fill="#fbbf24" font-size="10">• Cadena muy tensa: Dejar 1 cm de holgura.</text>
+                        </svg>
+                    `
+                },
+                {
+                    id: 'plom-3',
+                    number: 'Lección 3',
+                    title: 'Tinacos, Válvulas Check y Jarros de Aire',
+                    duration: '14 min',
+                    summary: 'Asegura buena presión de agua en toda la casa evitando bolsas de aire y retornos de flujo.',
+                    goldenRule: 'Todo tinaco instalado por gravedad DEBE llevar un Jarro de Aire inmediatamente después de la válvula de cierre de salida para expulsar burbujas y garantizar presión.',
+                    tools: [
+                        'Llave Stilson y pinzas de presión',
+                        'Termofusora o kit de pegamento según tubería',
+                        'Multiconector con válvula integrada para tinaco',
+                        'Válvula Check (columpio o resorte) y tubo para jarro de aire'
+                    ],
+                    steps: [
+                        { title: 'Altura mínima del tinaco', desc: 'La base del tinaco debe estar al menos 2 metros por encima de la regadera más alta de la casa para lograr una presión por gravedad funcional.' },
+                        { title: 'Instalación del Jarro de Aire', desc: 'Coloca una "Tee" en la línea de bajada justo después de la llave de paso. Sube un tubo vertical que sobrepase al menos 30 cm la altura máxima del tinaco con un bastón invertido.' },
+                        { title: 'Función de la Válvula Check', desc: 'Permite el paso del agua en un solo sentido. Es indispensable en bombas de cisterna (pichancha al fondo) y en redes donde conviven agua de la calle y del tinaco para evitar que el tinaco se vacíe hacia la red municipal.' },
+                        { title: 'Mantenimiento preventivo semestral', desc: 'Lava el tinaco cada 6 meses, revisa el estado del flotador y limpia el filtro de sedimentos (cartucho) para evitar que la tierra tape las regaderas y calentadores.' }
+                    ],
+                    svgDiagram: `
+                        <svg viewBox="0 0 600 190" class="w-full h-auto bg-slate-900 rounded-xl p-2">
+                            <text x="20" y="24" fill="#38bdf8" font-size="13" font-weight="bold">CONEXIÓN IDEAL DE TINACO Y JARRO DE AIRE</text>
+                            <!-- Base / Losa -->
+                            <rect x="30" y="155" width="540" height="12" fill="#475569"/>
+                            <!-- Tinaco -->
+                            <rect x="60" y="55" width="110" height="100" rx="12" fill="#0e7490" stroke="#38bdf8" stroke-width="2"/>
+                            <text x="90" y="110" fill="#ffffff" font-size="12" font-weight="bold">TINACO</text>
+                            <!-- Tubería salida -->
+                            <path d="M 170 140 L 280 140 L 280 175" fill="none" stroke="#22d3ee" stroke-width="6"/>
+                            <!-- Válvula de paso -->
+                            <circle cx="215" cy="140" r="8" fill="#fbbf24"/>
+                            <text x="190" y="125" fill="#fbbf24" font-size="9" font-weight="bold">Llave Paso</text>
+                            <!-- Jarro de aire -->
+                            <path d="M 255 140 L 255 35 L 270 35 L 270 48" fill="none" stroke="#34d399" stroke-width="5"/>
+                            <text x="280" y="45" fill="#34d399" font-size="10" font-weight="bold">Jarro de Aire (+30 cm sobre tinaco)</text>
+                            <text x="280" y="60" fill="#94a3b8" font-size="9">Libera bolsas de aire atrapadas</text>
+                            <!-- Válvula Check -->
+                            <rect x="360" y="105" width="190" height="40" rx="8" fill="#1e293b" stroke="#38bdf8"/>
+                            <text x="372" y="122" fill="#38bdf8" font-size="10" font-weight="bold">Válvula Check (Anti-retorno):</text>
+                            <text x="372" y="137" fill="#cbd5e1" font-size="9">Respeta siempre la flecha de flujo →</text>
+                        </svg>
+                    `
+                }
+            ],
+            electricidad: [
+                {
+                    id: 'elec-1',
+                    number: 'Lección 1',
+                    title: 'Seguridad Eléctrica, Multímetro y Código de Colores',
+                    duration: '12 min',
+                    summary: 'Aprende las reglas vitales antes de tocar un cable, cómo identificar Fase/Neutro/Tierra y medir voltaje.',
+                    goldenRule: 'JAMÁS confíes únicamente en apagar el interruptor de pared; baja la pastilla termomagnética correspondiente en el centro de carga y verifica ausencia de voltaje con tu probador.',
+                    tools: [
+                        'Multímetro digital (rango 200V/600V CA) y probador tipo pluma (buscapolos)',
+                        'Pinzas de electricista de 8" con mango aislado a 1000V',
+                        'Desarmadores aislados (plano y cruz)',
+                        'Cinta de aislar de vinil profesional (ej. 3M) y calzado con suela de goma'
+                    ],
+                    steps: [
+                        { title: 'Código de Colores Normativo (NOM-001-SEDE)', desc: 'FASE (Línea viva, 127V): Negro, Rojo o Azul. NEUTRO (Retorno, 0V): Blanco o Gris claro. TIERRA FÍSICA (Protección): Verde, Verde/Amarillo o cable desnudo.' },
+                        { title: 'Uso del Probador de Fase (Sin contacto)', desc: 'Acerca la punta del probador al aislamiento del cable: si enciende en rojo y pita, es la FASE energizada. El Neutro y la Tierra no deben activar el detector.' },
+                        { title: 'Medición de Voltaje con Multímetro', desc: 'Coloca la perilla en V~ (Corriente Alterna, escala 200V o Auto). Entre Fase y Neutro debes leer ~120V-127V. Entre Fase y Tierra ~127V. Entre Neutro y Tierra debe marcar 0V (máx 1-2V).' },
+                        { title: 'Empalmes seguros (Cola de rata y Western)', desc: 'Pela 1.5 cm de aislamiento sin mellar el cobre, entorcha firmemente con pinzas y encinta traslapando al 50% desde el aislamiento hacia la punta y de regreso.' }
+                    ],
+                    svgDiagram: `
+                        <svg viewBox="0 0 600 185" class="w-full h-auto bg-slate-900 rounded-xl p-2">
+                            <text x="20" y="24" fill="#fbbf24" font-size="13" font-weight="bold">CÓDIGO DE COLORES Y MEDICIÓN CON MULTÍMETRO (127V CA)</text>
+                            <!-- Cable Fase -->
+                            <rect x="40" y="50" width="180" height="14" rx="3" fill="#ef4444"/>
+                            <rect x="220" y="53" width="35" height="8" fill="#d97706"/>
+                            <text x="40" y="44" fill="#fca5a5" font-size="10" font-weight="bold">FASE (Negro / Rojo) - 127V</text>
+                            <!-- Cable Neutro -->
+                            <rect x="40" y="95" width="180" height="14" rx="3" fill="#f8fafc"/>
+                            <rect x="220" y="98" width="35" height="8" fill="#d97706"/>
+                            <text x="40" y="89" fill="#f8fafc" font-size="10" font-weight="bold">NEUTRO (Blanco) - 0V</text>
+                            <!-- Cable Tierra -->
+                            <rect x="40" y="140" width="180" height="14" rx="3" fill="#22c55e"/>
+                            <rect x="220" y="143" width="35" height="8" fill="#d97706"/>
+                            <text x="40" y="134" fill="#86efac" font-size="10" font-weight="bold">TIERRA FÍSICA (Verde) - Seguridad</text>
+                            <!-- Multímetro -->
+                            <rect x="330" y="40" width="220" height="125" rx="10" fill="#1e293b" stroke="#fbbf24" stroke-width="2"/>
+                            <rect x="350" y="55" width="180" height="40" rx="4" fill="#0f172a"/>
+                            <text x="385" y="82" fill="#34d399" font-size="20" font-family="monospace" font-weight="bold">127.4 V~</text>
+                            <text x="350" y="115" fill="#e2e8f0" font-size="10">• Fase + Neutro = ~127V</text>
+                            <text x="350" y="133" fill="#e2e8f0" font-size="10">• Fase + Tierra = ~127V</text>
+                            <text x="350" y="151" fill="#94a3b8" font-size="10">• Neutro + Tierra = 0V</text>
+                        </svg>
+                    `
+                },
+                {
+                    id: 'elec-2',
+                    number: 'Lección 2',
+                    title: 'Apagadores Sencillos, de Escalera (3 Vías) y Contactos',
+                    duration: '15 min',
+                    summary: 'Instala y reemplaza contactos polarizados y controla una lámpara desde dos puntos distintos.',
+                    goldenRule: 'El apagador SIEMPRE debe interrumpir la FASE, nunca el Neutro. Si cortas el Neutro, el socket del f
