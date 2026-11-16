@@ -3,95 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Escuela de Habilidades: Plomería y Electricidad</title>
+  <title>Academia Diaria: Plomería y Electricidad</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 800px; margin: 0 auto; padding: 20px; background: #f4f7f6; color: #333; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; max-width: 850px; margin: 0 auto; padding: 20px; background: #f4f7f6; color: #333; }
     header { background: #1e3a8a; color: white; padding: 20px; border-radius: 8px; text-align: center; }
     .modulo { background: white; padding: 20px; margin-top: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     h2 { color: #1e3a8a; border-bottom: 2px solid #e5e7eb; padding-bottom: 5px; }
-    .pregunta { margin-bottom: 15px; padding: 12px; background: #f9fafb; border-left: 4px solid #3b82f6; border-radius: 4px; }
-    label { display: block; margin: 6px 0; cursor: pointer; }
+    .pregunta { margin-bottom: 20px; padding: 15px; background: #f9fafb; border-left: 4px solid #3b82f6; border-radius: 4px; }
+    label { display: block; margin: 8px 0; cursor: pointer; }
     input[type="text"], input[type="email"] { width: 100%; padding: 10px; margin: 6px 0 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     button { background: #16a34a; color: white; border: none; padding: 14px 20px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; }
     button:hover { background: #15803d; }
     button:disabled { background: #9ca3af; cursor: not-allowed; }
     #resultado { margin-top: 20px; padding: 15px; border-radius: 6px; display: none; }
-    .feedback { font-size: 0.9em; margin-top: 8px; padding: 8px; border-radius: 4px; display: none; }
+    .feedback { font-size: 0.9em; margin-top: 10px; padding: 10px; border-radius: 4px; display: none; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Escuela de Habilidades: Plomería y Electricidad</h1>
-  <p>Aprende los fundamentos desde cero y pon a prueba tus conocimientos.</p>
+  <h1>Academia Diaria de Oficios: Plomería y Electricidad</h1>
+  <p>Pon a prueba tus conocimientos con más de 20 preguntas dinámicas diarias para principiantes.</p>
 </header>
 
-<!-- LECCIONES BÁSICAS -->
+<!-- REGISTRO Y EVALUACIÓN -->
 <div class="modulo">
-  <h2>Módulo 1: Conceptos Básicos de Plomería</h2>
-  <p><strong>1. Cinta Teflón:</strong> Se utiliza en roscas macho para evitar fugas. Siempre debe enrollarse en el sentido de las manecillas del reloj (hacia donde aprieta la tuerca) para que no se desenrolle al enroscar.</p>
-  <p><strong>2. Tipos de tubería comunes:</strong> El <em>PVC</em> se usa para desagües (agua sin presión), mientras que el <em>CPVC</em> o <em>PPR (termofusión)</em> soportan agua caliente y presión.</p>
-  <p><strong>3. Sifón o cespol:</strong> La curva en forma de "U" debajo del lavabo retiene un poco de agua para bloquear los malos olores del drenaje.</p>
-</div>
-
-<div class="modulo">
-  <h2>Módulo 2: Conceptos Básicos de Electricidad</h2>
-  <p><strong>1. Regla de oro de seguridad:</strong> Antes de tocar cualquier cable o apagador, baja la pastilla termomagnética (breaker) correspondiente en el centro de carga.</p>
-  <p><strong>2. Identificación de cables:</strong> La <strong>Fase</strong> lleva la corriente (usualmente cable negro o rojo), el <strong>Neutro</strong> cierra el circuito (blanco) y la <strong>Tierra física</strong> protege contra descargas (verde o desnudo).</p>
-  <p><strong>3. Interruptores:</strong> Siempre deben cortar la <em>Fase</em>, nunca el Neutro, para evitar que el foco quede energizado aunque esté apagado.</p>
-</div>
-
-<!-- FORMULARIO Y QUIZ CONECTADO A TU FORMSPREE -->
-<div class="modulo">
-  <h2>Evaluación Práctica y Registro</h2>
-  <p>Completa tus datos y responde el cuestionario. Al finalizar verás tu calificación y se enviará una copia al instructor.</p>
+  <h2>Evaluación Diaria de Conocimientos</h2>
+  <p>Ingresa tus datos. Al enviar el examen, se evaluará tu desempeño y se enviará un reporte detallado al instructor.</p>
 
   <form id="quizForm" action="https://formspree.io/f/mkjrjlbk" method="POST">
     <label for="nombre"><strong>Nombre completo del alumno:</strong></label>
     <input type="text" name="Nombre_Alumno" id="nombre" required placeholder="Ej. Juan Pérez">
 
-    <label for="correo"><strong>Correo electrónico del alumno (opcional):</strong></label>
-    <input type="email" name="email" id="correo" placeholder="Ej. juan@correo.com">
+    <label for="correo"><strong>Correo de contacto:</strong></label>
+    <input type="email" name="email" id="correo" required placeholder="Ej. juan@correo.com">
 
-    <!-- Pregunta 1 -->
-    <div class="pregunta">
-      <p><strong>1. [Plomería] ¿En qué dirección se debe enrollar la cinta teflón en una rosca?</strong></p>
-      <label><input type="radio" name="p1" value="0" required> En contra de las manecillas del reloj</label>
-      <label><input type="radio" name="p1" value="1"> En el sentido de las manecillas del reloj (hacia donde aprieta)</label>
-      <label><input type="radio" name="p1" value="0"> En cualquier dirección, no importa</label>
-      <div class="feedback" id="fb1"></div>
-    </div>
+    <!-- Contenedor dinámico donde aparecerán las 20+ preguntas -->
+    <div id="contenedorPreguntas"></div>
 
-    <!-- Pregunta 2 -->
-    <div class="pregunta">
-      <p><strong>2. [Plomería] ¿Para qué sirve la curva en forma de "U" (cespol) debajo del lavabo?</strong></p>
-      <label><input type="radio" name="p2" value="1" required> Para retener agua y evitar que regresen malos olores del drenaje</label>
-      <label><input type="radio" name="p2" value="0"> Para aumentar la presión del agua fría</label>
-      <label><input type="radio" name="p2" value="0"> Para filtrar el agua potable</label>
-      <div class="feedback" id="fb2"></div>
-    </div>
-
-    <!-- Pregunta 3 -->
-    <div class="pregunta">
-      <p><strong>3. [Electricidad] ¿Qué cable debe interrumpir siempre un apagador sencillo?</strong></p>
-      <label><input type="radio" name="p3" value="0" required> El cable Neutro (blanco)</label>
-      <label><input type="radio" name="p3" value="0"> La Tierra física (verde)</label>
-      <label><input type="radio" name="p3" value="1"> La Fase (negro o rojo)</label>
-      <div class="feedback" id="fb3"></div>
-    </div>
-
-    <!-- Pregunta 4 -->
-    <div class="pregunta">
-      <p><strong>4. [Electricidad] ¿Cuál es el primer paso obligatorio antes de cambiar un contacto eléctrico?</strong></p>
-      <label><input type="radio" name="p4" value="1" required> Bajar la pastilla (breaker) en el centro de carga y verificar ausencia de voltaje</label>
-      <label><input type="radio" name="p4" value="0"> Usar cinta de aislar sobre los dedos</label>
-      <label><input type="radio" name="p4" value="0"> Apagar únicamente las luces de la habitación</label>
-      <div class="feedback" id="fb4"></div>
-    </div>
-
-    <!-- Campos ocultos formateados para que te lleguen limpios a tu correo -->
+    <!-- Campos ocultos para Formspree -->
     <input type="hidden" name="Calificacion_Final" id="calificacionOculta">
-    <input type="hidden" name="Desglose_Respuestas" id="detalleOculto">
+    <input type="hidden" name="Desglose_Detallado" id="detalleOculto">
 
     <button type="submit" id="btnEnviar">Calificar y Enviar Resultados</button>
   </form>
@@ -100,43 +52,376 @@
 </div>
 
 <script>
+  // Banco completo de más de 20 preguntas (Plomería y Electricidad)
+  const bancoPreguntas = [
+    // PLOMERÍA (12 preguntas)
+    {
+      tipo: "Plomería",
+      texto: "¿En qué dirección se debe enrollar la cinta teflón en una rosca macho para evitar fugas?",
+      opciones: [
+        { texto: "En contra de las manecillas del reloj", correcta: false },
+        { texto: "En el sentido de las manecillas del reloj (hacia donde aprieta)", correcta: true },
+        { texto: "En cualquier dirección, no afecta en nada", correcta: false }
+      ],
+      explicacionOk: "Correcto: Al enroscar, la fricción ajusta la cinta en lugar de desenrollarla.",
+      explicacionErr: "Incorrecto: Debe ir en sentido horario para que apriete junto con la pieza."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Para qué sirve principalmente la curva en 'U' (cespol) instalada bajo el lavabo?",
+      opciones: [
+        { texto: "Para aumentar la presión de salida del agua fría", correcta: false },
+        { texto: "Para retener un sello de agua que bloquea los malos olores del drenaje", correcta: true },
+        { texto: "Para filtrar sedimentos y basuras del agua potable", correcta: false }
+      ],
+      explicacionOk: "Correcto: El sello hidráulico impide el paso de gases fétidos del alcantarillado.",
+      explicacionErr: "Incorrecto: Su función es bloquear los malos olores del drenaje."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué tipo de tubería plástica es adecuada para conducir agua caliente y soportar alta presión en instalaciones modernas?",
+      opciones: [
+        { texto: "Tubería de PVC sanitario", correcta: false },
+        { texto: "Tubería de CPVC o PPR (Termofusión)", correcta: true },
+        { texto: "Manguera flexible de jardín transparente", correcta: false }
+      ],
+      explicacionOk: "Correcto: El CPVC y el PPR resisten altas temperaturas y presiones de agua.",
+      explicacionErr: "Incorrecto: El PVC normal solo es para desagües sin presión ni calor."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Cuál es la función principal de una llave de paso general en una vivienda?",
+      opciones: [
+        { texto: "Regular la temperatura del agua de la regadera", correcta: false },
+        { texto: "Interrumpir por completo el suministro de agua en caso de fuga o reparación", correcta: true },
+        { texto: "Purificar el agua que entra del tinaco", correcta: false }
+      ],
+      explicacionOk: "Correcto: Permite cortar el agua de toda la casa rápidamente.",
+      explicacionErr: "Incorrecto: Su propósito es aislar el flujo de agua ante emergencias."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué material se emplea comúnmente para limpiar y preparar tubos y conexiones de cobre antes de soldar?",
+      opciones: [
+        { texto: "Lija para metal, pasta para soldar y flux", correcta: true },
+        { texto: "Aceite de cocina y trapo húmedo", correcta: false },
+        { texto: "Pintura de esmalte sintético", correcta: false }
+      ],
+      explicacionOk: "Correcto: La limpieza física (lija) y química (pasta) aseguran que la soldadura corra bien.",
+      explicacionErr: "Incorrecto: Se requiere limpiar óxidos y aplicar flux para soldar."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué componente dentro del tanque del escusado (inodoro) regula el nivel máximo de llenado del agua?",
+      opciones: [
+        { texto: "El sapito o brida de descarga", correcta: false },
+        { texto: "La válvula de admisión (flotador)", correcta: true },
+        { texto: "La palanca de accionamiento exterior", correcta: false }
+      ],
+      explicacionOk: "Correcto: La válvula de llenado corta el paso cuando el agua alcanza su nivel óptimo.",
+      explicacionErr: "Incorrecto: El sapito sella el fondo al descargar; el flotador controla el llenado."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Por qué es importante colocar respiraderos (ventilas) en la red sanitaria de una casa?",
+      opciones: [
+        { texto: "Para que el agua fluya con mayor velocidad sin generar vacíos o succión en los sifones", correcta: true },
+        { texto: "Para calentar el agua del drenaje con aire caliente", correcta: false },
+        { texto: "Para evitar que los tubos se congelen en invierno", correcta: false }
+      ],
+      explicacionOk: "Correcto: Los respiraderos equalizan la presión de aire evitando que se vacíen los cespoles.",
+      explicacionErr: "Incorrecto: Evitan problemas de succión y malos olores en los desagües."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué herramienta se utiliza comúnmente para apretar tuercas hexagonales o uniones en lavabos en espacios muy reducidos?",
+      opciones: [
+        { texto: "Llave stilson (de tubo)", correcta: false },
+        { texto: "Llave de lavabo (telescópica / de cubo)", correcta: true },
+        { texto: "Martillo de uña", correcta: false }
+      ],
+      explicacionOk: "Correcto: Su diseño alargado permite alcanzar tuercas difíciles bajo los muebles de baño.",
+      explicacionErr: "Incorrecto: La llave stilson es para tubos roscados grandes; se usa una llave especial de lavabo."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué indica si un medidor de agua municipal sigue girando lentamente cuando todas las llaves de la casa están cerradas?",
+      opciones: [
+        { texto: "Que hay una fuga oculta en la instalación interior", correcta: true },
+        { texto: "Que el agua del tinaco se está llenando normalmente", correcta: false },
+        { texto: "Que la presión del municipio es demasiado baja", correcta: false }
+      ],
+      explicacionOk: "Correcto: Si todo está cerrado y gira, existe una pérdida o fuga de agua.",
+      explicacionErr: "Incorrecto: Apunta inequívocamente a una fuga subterránea o en muros."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué método se utiliza para unir tubos y conexiones de polipropileno (PPR)?",
+      opciones: [
+        { texto: "Pegamento epóxico de secado rápido", correcta: false },
+        { texto: "Termofusión (calentamiento con máquina y dados especiales)", correcta: true },
+        { texto: "Soldadura de estaño con soplete", correcta: false }
+      ],
+      explicacionOk: "Correcto: La termofusión funde molecularmente el tubo y la conexión.",
+      explicacionErr: "Incorrecto: El PPR no se pega con solventes ni se suelda con estaño."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Cuál es la causa más común de goteo en una llave de mezcladora de disco cerámico desgastada?",
+      opciones: [
+        { texto: "Desgaste o acumulación de sarro en los discos internos que impide el sello perfecto", correcta: true },
+        { texto: "Falta de cinta teflón en la tubería exterior de la pared", correcta: false },
+        { texto: "Exceso de presión en el calentador solar", correcta: false }
+      ],
+      explicacionOk: "Correcto: El sarro o rayones en los discos cerámicos internos provocan el goteo.",
+      explicacionErr: "Incorrecto: El teflón va en la pared; el goteo interno proviene del cartucho cerámico."
+    },
+    {
+      tipo: "Plomería",
+      texto: "¿Qué medida estándar en pulgadas tiene comúnmente la tubería de alimentación principal de agua en una casa habitación económica?",
+      opciones: [
+        { texto: "1/2 pulgada o 3/4 de pulgada", correcta: true },
+        { texto: "4 pulgadas", correcta: false },
+        { texto: "3 pulgadas", correcta: false }
+      ],
+      explicacionOk: "Correcto: 1/2\" y 3/4\" son las medidas residenciales estándar.",
+      explicacionErr: "Incorrecto: 3 y 4 pulgadas corresponden a tuberías de descarga sanitaria."
+    },
+
+    // ELECTRICIDAD (12 preguntas)
+    {
+      tipo: "Electricidad",
+      texto: "¿Cuál es el primer paso obligatorio antes de manipular un contacto eléctrico o cambiar un apagador?",
+      opciones: [
+        { texto: "Bajar la pastilla termomagnética (breaker) correspondiente en el centro de carga", correcta: true },
+        { texto: "Ponerse guantes de tela común y corriente", correcta: false },
+        { texto: "Apagar únicamente los focos de la sala", correcta: false }
+      ],
+      explicacionOk: "Correcto: Desenergizar el circuito desde el tablero previene descargas fatales.",
+      explicacionErr: "Incorrecto: Siempre se debe cortar la energía desde la pastilla principal o división."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué color de cable se asigna tradicionalmente para identificar al conductor de **Fase** (corriente viva) en instalaciones residenciales?",
+      opciones: [
+        { texto: "Blanco", correcta: false },
+        { texto: "Negro, rojo o azul", correcta: true },
+        { texto: "Verde o desnudo", correcta: false }
+      ],
+      explicacionOk: "Correcto: Los colores oscuros o vivos indican la fase con corriente.",
+      explicacionErr: "Incorrecto: El blanco es neutro y el verde es tierra física."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué función cumple el cable de **Tierra física** (verde o desnudo) en una instalación?",
+      opciones: [
+        { texto: "Llevar la corriente de retorno hacia la compañía de luz", correcta: false },
+        { texto: "Derivar corrientes de fuga o descargas accidentales hacia el suelo para proteger al usuario", correcta: true },
+        { texto: "Iluminar los indicadores LED del contacto", correcta: false }
+      ],
+      explicacionOk: "Correcto: Protege contra corto circuitos y descargas enviándolas a una varilla de tierra.",
+      explicacionErr: "Incorrecto: Esa es la función del neutro; la tierra física es una protección de seguridad."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué cable debe interrumpir siempre un apagador sencillo al encender y apagar un foco?",
+      opciones: [
+        { texto: "El cable Neutro", correcta: false },
+        { texto: "El cable de Fase", correcta: true },
+        { texto: "El cable de Tierra física", correcta: false }
+      ],
+      explicacionOk: "Correcto: Cortar la fase deja el portalámparas completamente desenergizado al apagar.",
+      explicacionErr: "Incorrecto: Si cortas el neutro, el foco sigue teniendo corriente viva en el casquillo."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué instrumento se utiliza para verificar si un cable tiene voltaje activo sin necesidad de pelarlo?",
+      opciones: [
+        { texto: "Un multímetro digital o un probador de voltaje sin contacto (tipo pluma)", correcta: true },
+        { texto: "Un desarmador de golpe con mango de madera", correcta: false },
+        { texto: "Una cinta métrica metálica", correcta: false }
+      ],
+      explicacionOk: "Correcto: Detectan campos eléctricos o miden voltaje de forma segura.",
+      explicacionErr: "Incorrecto: Se requiere un multímetro o detector de voltaje adecuado."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué es un interruptor termomagnético (pastilla breaker)?",
+      opciones: [
+        { texto: "Un dispositivo que protege la instalación cortando la luz ante sobrecargas o cortos", correcta: true },
+        { texto: "Un aparato para ahorrar dinero en la tarifa de luz", correcta: false },
+        { texto: "Un regulador de voltaje para computadoras", correcta: false }
+      ],
+      explicacionOk: "Correcto: Protege los cables de calentamiento excesivo por sobrecarga o corto.",
+      explicacionErr: "Incorrecto: Su propósito principal es la protección automática de los circuitos."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué calibre de cable AWG se utiliza comúnmente para alimentar contactos (enchufes) de uso general de 15 a 20 Amperes en una casa?",
+      opciones: [
+        { texto: "Calibre 14 o Calibre 12 AWG", correcta: true },
+        { texto: "Calibre 2 o Calibre 4 AWG", correcta: false },
+        { texto: "Calibre 22 AWG", correcta: false }
+      ],
+      explicacionOk: "Calibre 12 (para 20A) y Calibre 14 (para 15A) son los estándar residenciales.",
+      explicacionErr: "Incorrecto: Los calibres muy gruesos (2 o 4) son para acometidas principales."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué sucede si se conecta un aparato que consume mucha corriente (como un calefactor o microondas) en un cableado muy delgado?",
+      opciones: [
+        { texto: "El cable se calienta excesivamente, derrite el aislar y puede provocar un incendio", correcta: true },
+        { texto: "El aparato funciona más rápido y con mayor eficiencia", correcta: false },
+        { texto: "La luz de la casa se vuelve de color verde", correcta: false }
+      ],
+      explicacionOk: "Correcto: La sobrecarga en cables delgados genera calor peligroso.",
+      explicacionErr: "Incorrecto: Representa un riesgo grave de incendio por calentamiento de los conductores."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Para qué sirve un contacto polarizado con ranuras de diferente tamaño?",
+      opciones: [
+        { texto: "Para distinguir correctamente dónde entra la fase, el neutro y la tierra", correcta: true },
+        { texto: "Para conectar aparatos de corriente directa únicamente", correcta: false },
+        { texto: "Para duplicar la velocidad del internet doméstico", correcta: false }
+      ],
+      explicacionOk: "Correcto: La ranura más pequeña es fase, la grande es neutro y la redonda es tierra.",
+      explicacionErr: "Incorrecto: Garantiza la polaridad segura de los equipos conectados."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué es un circuito en serie comparado con un circuito en paralelo en iluminación residencial?",
+      opciones: [
+        { texto: "En paralelo cada foco recibe el voltaje completo y si uno falla los demás siguen encendidos", correcta: true },
+        { texto: "En serie los focos brillan el doble de fuerte", correcta: false },
+        { texto: "En las casas modernas todas las recámaras se conectan estrictamente en serie", correcta: false }
+      ],
+      explicacionOk: "Correcto: Las casas usan circuitos en paralelo para independencia de cada lámpara.",
+      explicacionErr: "Incorrecto: En serie, si un foco se funde, se apagan todos los demás del tramo."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué función cumple una roseta o portalámparas en una instalación de iluminación?",
+      opciones: [
+        { texto: "Sostener mecánicamente el foco y conectar sus terminales a la corriente eléctrica", correcta: true },
+        { texto: "Filtrar los rayos ultravioleta de la bombilla", correcta: false },
+        { texto: "Aumentar la potencia en watts de la bombilla LED", correcta: false }
+      ],
+      explicacionOk: "Correcto: Es el soporte y conector base para las lámparas o focos.",
+      explicacionErr: "Incorrecto: Sirve para sujetar el foco y alimentarlo eléctricamente."
+    },
+    {
+      tipo: "Electricidad",
+      texto: "¿Qué medida de precaución básica se debe tomar al usar una escalera metálica para hacer trabajos eléctricos en altura?",
+      opciones: [
+        { texto: "Revisar que no haga contacto con cables energizados expuestos, prefiriendo escaleras de fibra de vidrio", correcta: true },
+        { texto: "Pintarla de color rojo brillante", correcta: false },
+        { texto: "Llenar los peldaños con agua para mayor peso", correcta: false }
+      ],
+      explicacionOk: "Correcto: Las escaleras metálicas conducen electricidad; se recomiendan de fibra de vidrio.",
+      explicacionErr: "Incorrecto: El metal es conductor y representa un peligro eléctrico grave."
+    }
+  ];
+
+  // Función para barajar y seleccionar exactamente 20 preguntas aleatorias cada día
+  function cargarPreguntasDiarias() {
+    // Mezclar el banco de preguntas aleatoriamente
+    const preguntasMezcladas = [...bancoPreguntas].sort(() => 0.5 - Math.random());
+    const seleccionadas = preguntasMezcladas.slice(0, 20); // Tomar 20 preguntas
+
+    const contenedor = document.getElementById('contenedorPreguntas');
+    let html = '';
+
+    seleccionadas.forEach((p, index) => {
+      // Mezclar también las opciones de cada pregunta para que no siempre estén en el mismo orden
+      const opcionesMezcladas = [...p.opciones].sort(() => 0.5 - Math.random());
+
+      html += `
+        <div class="pregunta">
+          <p><strong>${index + 1}. [${p.tipo}] ${p.texto}</strong></p>
+      `;
+
+      opcionesMezcladas.forEach((op, opIndex) => {
+        html += `
+          <label>
+            <input type="radio" name="p_${index}" value="${op.correcta ? 1 : 0}" required>
+            ${op.texto}
+          </label>
+        `;
+      });
+
+      // Guardamos la explicación de forma oculta en atributos de datos para validarla en JavaScript
+      html += `
+          <div class="feedback" id="fb_${index}" 
+               data-ok="${p.explicacionOk.replace(/"/g, '&quot;')}" 
+               data-err="${p.explicacionErr.replace(/"/g, '&quot;')}"></div>
+        </div>
+      `;
+    });
+
+    contenedor.innerHTML = html;
+  }
+
+  // Ejecutar al cargar la página para generar las 20 preguntas del día
+  window.onload = cargarPreguntasDiarias;
+
+  // Manejo del formulario y calificación
   document.getElementById('quizForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const form = this;
     const btn = document.getElementById('btnEnviar');
     btn.disabled = true;
-    btn.textContent = "Calculando y enviando...";
+    btn.textContent = "Calculando calificación y enviando...";
 
-    const p1 = parseInt(form.p1.value);
-    const p2 = parseInt(form.p2.value);
-    const p3 = parseInt(form.p3.value);
-    const p4 = parseInt(form.p4.value);
+    let totalAciertos = 0;
+    let detalleRespuestas = "";
+    const totalPreguntas = 20;
 
-    const total = p1 + p2 + p3 + p4;
-    const porcentaje = (total / 4) * 100;
+    for (let i = 0; i < totalPreguntas; i++) {
+      const radios = document.getElementsByName(`p_${i}`);
+      let respondidaCorrectamente = false;
+      let seleccionoAlgo = false;
 
-    // Mostrar explicación didáctica debajo de cada pregunta
-    mostrarFeedback('fb1', p1 === 1, "Correcto: Al apretar la pieza, la cinta se ajusta en lugar de salirse.", "Incorrecto: Debe ir en sentido horario para que no se desenrolle al apretar.");
-    mostrarFeedback('fb2', p2 === 1, "Correcto: Ese sello hidráulico bloquea los gases de la tubería.", "Incorrecto: Su función principal es formar un sello de agua contra malos olores.");
-    mostrarFeedback('fb3', p3 === 1, "Correcto: Cortar la fase evita descargas al cambiar un foco.", "Incorrecto: Nunca se corta el neutro; siempre se interrumpe la Fase.");
-    mostrarFeedback('fb4', p4 === 1, "Correcto: La seguridad siempre empieza cortando el suministro desde el tablero.", "Incorrecto: Siempre debes bajar la pastilla (breaker) antes de manipular cables.");
+      for (const r of radios) {
+        if (r.checked) {
+          seleccionoAlgo = true;
+          if (r.value === "1") {
+            respondidaCorrectamente = true;
+          }
+        }
+      }
 
-    // Preparar datos para Formspree
-    document.getElementById('calificacionOculta').value = `${total}/4 (${porcentaje}%)`;
-    document.getElementById('detalleOculto').value = 
-      `P1 (Teflón): ${p1 ? 'Acertó' : 'Falló'} | ` +
-      `P2 (Cespol): ${p2 ? 'Acertó' : 'Falló'} | ` +
-      `P3 (Fase): ${p3 ? 'Acertó' : 'Falló'} | ` +
-      `P4 (Seguridad): ${p4 ? 'Acertó' : 'Falló'}`;
+      const fb = document.getElementById(`fb_${i}`);
+      fb.style.display = 'block';
+
+      if (respondidaCorrectamente) {
+        totalAciertos++;
+        fb.style.background = '#dcfce7';
+        fb.style.color = '#166534';
+        fb.textContent = "✅ " + fb.getAttribute('data-ok');
+        detalleRespuestas += `P${i+1}: Correcta | `;
+      } else {
+        fb.style.background = '#fee2e2';
+        fb.style.color = '#991b1b';
+        fb.textContent = "❌ " + fb.getAttribute('data-err');
+        detalleRespuestas += `P${i+1}: Incorrecta | `;
+      }
+    }
+
+    const porcentaje = (totalAciertos / totalPreguntas) * 100;
+
+    // Asignar a los campos ocultos que van directo a tu Formspree
+    document.getElementById('calificacionOculta').value = `${totalAciertos}/${totalPreguntas} (${porcentaje}%)`;
+    document.getElementById('detalleOculto').value = detalleRespuestas;
 
     const divRes = document.getElementById('resultado');
     divRes.style.display = 'block';
-    divRes.style.background = porcentaje >= 75 ? '#dcfce7' : '#fef3c7';
-    divRes.style.color = porcentaje >= 75 ? '#166534' : '#92400e';
-    divRes.innerHTML = `<strong>¡Hola ${document.getElementById('nombre').value}! Obtuviste ${total} de 4 aciertos (${porcentaje}%).</strong><br>Revisa las explicaciones arriba.`;
+    divRes.style.background = porcentaje >= 70 ? '#dcfce7' : '#fef3c7';
+    divRes.style.color = porcentaje >= 70 ? '#166534' : '#92400e';
+    divRes.innerHTML = `<strong>¡Excelente esfuerzo, ${document.getElementById('nombre').value}!</strong><br>Obtuviste <strong>${totalAciertos} de ${totalPreguntas}</strong> aciertos (${porcentaje}%). Revisa tus resultados detallados arriba.`;
 
-    // Enviar por AJAX a tu endpoint https://formspree.io/f/mkjrjlbk
+    // Envío por AJAX a tu endpoint exacto de Formspree
     fetch(form.action, {
       method: 'POST',
       body: new FormData(form),
@@ -144,28 +429,20 @@
     })
     .then(response => {
       if (response.ok) {
-        divRes.innerHTML += "<br><br>✅ <strong>Tus resultados han sido enviados correctamente al correo del instructor.</strong>";
-        btn.textContent = "Resultados Enviados";
+        divRes.innerHTML += "<br><br>✅ <strong>Resultados enviados con éxito a tu correo electrónico.</strong>";
+        btn.textContent = "¡Examen Enviado con Éxito!";
       } else {
-        divRes.innerHTML += "<br><br>⚠️ Hubo un problema al enviar los datos al correo. Intenta de nuevo.";
+        divRes.innerHTML += "<br><br>⚠️ Hubo un detalle al enviar el correo. Por favor intenta de nuevo.";
         btn.disabled = false;
         btn.textContent = "Reintentar Envío";
       }
     })
     .catch(() => {
-      divRes.innerHTML += "<br><br>⚠️ Error de conexión al enviar los resultados.";
+      divRes.innerHTML += "<br><br>⚠️ Error de red al intentar enviar los resultados.";
       btn.disabled = false;
       btn.textContent = "Reintentar Envío";
     });
   });
-
-  function mostrarFeedback(id, esCorrecta, textoOk, textoError) {
-    const el = document.getElementById(id);
-    el.style.display = 'block';
-    el.style.background = esCorrecta ? '#dcfce7' : '#fee2e2';
-    el.style.color = esCorrecta ? '#166534' : '#991b1b';
-    el.textContent = esCorrecta ? textoOk : textoError;
-  }
 </script>
 
 </body>
